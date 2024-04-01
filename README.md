@@ -1,6 +1,6 @@
 # kennethjallen.github.io
 
-My personal website, featuring my papers and projects.
+My personal website, featuring my projects and papers.
 
 # Credits
 
