@@ -128,6 +128,8 @@ input, select, textarea {
 	h2 {
 		font-size: 2em;
 		letter-spacing: -1px;
+		text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+		filter: drop-shadow(2px 2px 2px black);
 	}
 
 		h2.alt {
