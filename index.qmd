@@ -1,0 +1,64 @@
+---
+title: "Hi! I'm Dr. Kenneth Allen."
+title-block-banner: assets/images/banner.png
+---
+
+# Portfolio
+
+I've worked on numerous projects related to mathematical modeling, simulations, and engineering. From simulating high energy plasma in tokamak fusion reactors, to using graph theory to model card games.
+
+## Projects
+
+### YGO Small World
+
+[![](assets/images/small-world.png)](https://github.com/KennethJAllen/YGO-small-world)
+
+### Santorini
+
+[![](assets/images/santorini.png)](https://github.com/KennethJAllen/santorini)
+
+### CUR Dynamic Mode Decomposition
+
+[![](assets/images/dmd.gif)](https://github.com/KennethJAllen/dynamic-mode-decomposition)
+
+### Data Completion
+
+[![](assets/images/image-completion.png)](https://github.com/KennethJAllen/data-completion-research)
+
+### Boston Coffee
+
+[![](assets/images/coffee.png)]("/coffee/")
+
+### Kalman Filter
+
+[![](assets/images/kalman.png)](https://github.com/KennethJAllen/kalman-filter)
+
+## Papers and Disertation
+
+### Maximal Volume Matrix Cross Approximation for Image Compression and Least Squares Solution
+
+[![](assets/images/cur_img_compression.png)](https://arxiv.org/abs/2309.17403)
+
+### Compression of Tokamak Simulation Data
+
+[![](assets/images/tokamak.png)](https://www.sciencedirect.com/science/article/abs/pii/S0021999123001845)
+
+### A Geometric Approach to Low-Rank Matrix and Tensor Completion Dissertation
+
+[![](assets/images/dissertation.png)](https://esploro.libs.uga.edu/esploro/outputs/doctoral/A-Geometric-Approach-to-Low-Rank-Matrix/9949421027102959)
+
+### Non-Archimedean Hénon Maps
+
+[![](assets/images/arithmetic-dynamics.png)](https://arxiv.org/abs/1610.04271)
+
+# About Me
+
+![](assets/images/aboutme.jpg)
+
+I am a Data Scientist with a PhD is in Mathematics and research on machine learning, fusion simulations, data completion, and low-rank matrix and tensor completion. My preferred programing languages are Python and SQL, as well as MATLAB and Lisp.
+
+In my free time, I enjoy traveling, trying different restaurants with great food, and exploring coffee shops.
+
+# Contact
+
+If you'd like to collaborate or discuss potential projects, feel free to reach out to me on [LinkedIn](https://www.linkedin.com/in/kennethallenmath)!

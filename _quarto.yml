@@ -1,0 +1,16 @@
+project:
+  type: website
+
+website:
+  title: "Dr. Kenneth Allen"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - about.qmd
+  sidebar:
+    contents: auto
+format:
+  html:
+    theme: cosmo
+    toc: true
