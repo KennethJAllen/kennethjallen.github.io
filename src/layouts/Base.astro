@@ -1,0 +1,73 @@
+---
+import '../styles/global.css';
+import { Image } from 'astro:assets';
+import SocialIcons from '../components/SocialIcons.astro';
+import avatar from '../assets/images/avatar.png';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title = 'Dr. Kenneth Allen',
+  description = 'Data scientist and mathematician. PhD in numerical analysis, with research on low-rank matrix completion, nuclear fusion simulation, and reinforcement learning.',
+  image = '/favicon.png',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2BKNZXCBYE"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-2BKNZXCBYE');
+    </script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <div class="sidebar-top">
+          <Image src={avatar} alt="Kenneth Allen" class="sidebar-avatar" widths={[180, 360]} loading="eager" />
+          <h1 class="sidebar-name">Kenneth Allen</h1>
+          <p class="sidebar-title">Data Scientist</p>
+          <nav class="sidebar-nav" aria-label="Primary">
+            <ul>
+              <li><a href="#top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/></svg><span>Intro</span></a></li>
+              <li><a href="#portfolio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Portfolio</span></a></li>
+              <li><a href="#papers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h11a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3Z"/><path d="M8 8h6"/><path d="M8 12h6"/></svg><span>Papers</span></a></li>
+              <li><a href="#about"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg><span>About</span></a></li>
+              <li><a href="#contact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="m3 7 9 6 9-6"/></svg><span>Contact</span></a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="sidebar-bottom">
+          <SocialIcons />
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <slot />
+    </main>
+  </body>
+</html>
