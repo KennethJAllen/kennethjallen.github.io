@@ -7,14 +7,32 @@ interface Props {
   summary?: string;
   image: ImageMetadata;
   imageAlt: string;
+  video?: string;
   loading?: 'eager' | 'lazy';
 }
 
-const { href, title, summary, image, imageAlt, loading = 'lazy' } = Astro.props;
+const { href, title, summary, image, imageAlt, video, loading = 'lazy' } = Astro.props;
+const Wrapper = href ? 'a' : 'div';
+const wrapperProps = href
+  ? { href, class: 'card-image', 'aria-label': title, rel: 'noopener' }
+  : { class: 'card-image' };
 ---
 <article class="card">
-  {href ? (
-    <a href={href} class="card-image" aria-label={title} rel="noopener">
+  <Wrapper {...wrapperProps}>
+    {video ? (
+      <video
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        poster={image.src}
+        aria-label={imageAlt}
+      >
+        <source src={`${video}.webm`} type="video/webm" />
+        <source src={`${video}.mp4`} type="video/mp4" />
+      </video>
+    ) : (
       <Image
         src={image}
         alt={imageAlt}
@@ -22,18 +40,8 @@ const { href, title, summary, image, imageAlt, loading = 'lazy' } = Astro.props;
         sizes="(min-width: 1380px) 340px, (min-width: 1100px) 28vw, (min-width: 600px) 45vw, 100vw"
         loading={loading}
       />
-    </a>
-  ) : (
-    <div class="card-image">
-      <Image
-        src={image}
-        alt={imageAlt}
-        widths={[600, 900, 1200]}
-        sizes="(min-width: 1380px) 340px, (min-width: 1100px) 28vw, (min-width: 600px) 45vw, 100vw"
-        loading={loading}
-      />
-    </div>
-  )}
+    )}
+  </Wrapper>
   <div class="card-body">
     <h3>{href ? <a href={href} rel="noopener">{title}</a> : title}</h3>
     {summary && <p>{summary}</p>}

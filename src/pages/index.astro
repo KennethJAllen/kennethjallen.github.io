@@ -26,14 +26,15 @@ const papers = (await getCollection('papers')).sort(
     <div class="container">
       <h2>Portfolio</h2>
       <div class="project-grid">
-        {projects.map((p) => (
+        {projects.map((p, i) => (
           <ProjectCard
             href={p.data.externalUrl ?? p.data.demoUrl}
             title={p.data.title}
             summary={p.data.summary}
             image={p.data.image}
             imageAlt={p.data.imageAlt}
-            loading="eager"
+            video={p.data.video}
+            loading={i < 6 ? 'eager' : 'lazy'}
           />
         ))}
       </div>
@@ -70,7 +71,7 @@ const papers = (await getCollection('papers')).sort(
             including aviation, nuclear fusion, and oncology.
           </p>
           <p>
-            In my free time, I enjoy yoga and exploring restaurants and coffee shops.
+            In my free time, I enjoy yoga and exploring restaurants and <a href="https://docs.google.com/spreadsheets/d/1hNrP-fycwsPOH5xp-GcDjjm9GtxcvnRng2Zk4MMmQ4A">coffee shops</a>.
           </p>
         </div>
       </div>

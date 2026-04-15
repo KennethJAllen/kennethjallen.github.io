@@ -35,6 +35,32 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:image" content={new URL(image, Astro.site)} />
     <meta name="twitter:card" content="summary_large_image" />
 
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Kenneth Allen",
+      "honorificPrefix": "Dr.",
+      "url": "https://www.kennethallenmath.com",
+      "image": new URL('/favicon.png', Astro.site).toString(),
+      "jobTitle": "Data Scientist",
+      "description": description,
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "University of Georgia",
+      },
+      "knowsAbout": [
+        "Numerical analysis",
+        "Low-rank matrix completion",
+        "Dynamic mode decomposition",
+        "Nuclear fusion simulation",
+        "Reinforcement learning",
+      ],
+      "sameAs": [
+        "https://github.com/KennethJAllen",
+        "https://www.linkedin.com/in/kennethallenmath/",
+      ],
+    })}></script>
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2BKNZXCBYE"></script>
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
