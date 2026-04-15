@@ -1,0 +1,90 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import aboutMe from '../assets/images/aboutme.jpg';
+import banner from '../assets/images/banner.png';
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const papers = (await getCollection('papers')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+<Base>
+  <section id="top" class="page-section hero" style={`background-image: url(${banner.src})`}>
+    <div class="container">
+      <div class="hero-text">
+        <h2>Hi, I'm<br />Dr. Kenneth Allen.</h2>
+      </div>
+    </div>
+  </section>
+
+  <section id="portfolio" class="page-section">
+    <div class="container">
+      <h2>Portfolio</h2>
+      <div class="project-grid">
+        {projects.map((p) => (
+          <ProjectCard
+            href={p.data.externalUrl ?? p.data.demoUrl}
+            title={p.data.title}
+            summary={p.data.summary}
+            image={p.data.image}
+            imageAlt={p.data.imageAlt}
+            loading="eager"
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="papers" class="page-section">
+    <div class="container">
+      <h2>Papers &amp; Dissertation</h2>
+      <div class="project-grid">
+        {papers.map((p) => (
+          <ProjectCard
+            href={p.data.url}
+            title={p.data.title}
+            summary={p.data.venue ?? undefined}
+            image={p.data.image}
+            imageAlt={p.data.imageAlt}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="page-section">
+    <div class="container">
+      <h2>About</h2>
+      <div class="about">
+        <Image src={aboutMe} alt="Kenneth Allen" widths={[400, 600, 800]} sizes="(min-width: 720px) 40vw, 100vw" />
+        <div>
+          <p>
+            Data scientist, PhD in Mathematics. Numerical analysis research 
+            supporting ML applications for data completion and nuclear fusion 
+            simulation. Experience in modeling and simulation for diverse fields 
+            including aviation, nuclear fusion, and oncology.
+          </p>
+          <p>
+            In my free time, I enjoy yoga and exploring restaurants and coffee shops.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="page-section">
+    <div class="container">
+      <h2>Contact</h2>
+      <p>
+        Feel free to reach out on
+        {' '}<a href="https://www.linkedin.com/in/kennethallenmath/">LinkedIn</a>
+        {' '}or <a href="https://github.com/KennethJAllen">GitHub</a>.
+      </p>
+    </div>
+  </section>
+</Base>
