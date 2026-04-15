@@ -6,7 +6,7 @@ Built with [Astro](https://astro.build/).
 
 ## Local development
 
-Requires Node.js 18.14+ and npm.
+Requires Node.js 22.12+ and npm.
 
 Install dependencies:
 
