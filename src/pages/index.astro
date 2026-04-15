@@ -26,14 +26,14 @@ const papers = (await getCollection('papers')).sort(
     <div class="container">
       <h2>Portfolio</h2>
       <div class="project-grid">
-        {projects.map((p) => (
+        {projects.map((p, i) => (
           <ProjectCard
             href={p.data.externalUrl ?? p.data.demoUrl}
             title={p.data.title}
             summary={p.data.summary}
             image={p.data.image}
             imageAlt={p.data.imageAlt}
-            loading="eager"
+            loading={i < 6 ? 'eager' : 'lazy'}
           />
         ))}
       </div>
