@@ -1,0 +1,72 @@
+---
+import { getCollection, render } from 'astro:content';
+import Detail from '../../layouts/Detail.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const siteUrl = Astro.site!.toString();
+const pageUrl = new URL(`/projects/${entry.id}/`, Astro.site).toString();
+const isGitHub = entry.data.externalUrl?.startsWith('https://github.com/') ?? false;
+
+const links = [];
+if (entry.data.demoUrl) links.push({ href: entry.data.demoUrl, label: 'Play in browser' });
+if (entry.data.externalUrl) {
+  links.push({
+    href: entry.data.externalUrl,
+    label: isGitHub ? 'View on GitHub' : 'View project',
+    secondary: links.length > 0,
+  });
+}
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': isGitHub ? 'SoftwareSourceCode' : 'CreativeWork',
+      name: entry.data.title,
+      description: entry.data.summary,
+      url: pageUrl,
+      mainEntityOfPage: pageUrl,
+      ...(isGitHub
+        ? { codeRepository: entry.data.externalUrl }
+        : entry.data.externalUrl
+          ? { sameAs: entry.data.externalUrl }
+          : {}),
+      author: {
+        '@type': 'Person',
+        '@id': `${siteUrl}#person`,
+        name: 'Kenneth Allen',
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Portfolio', item: `${siteUrl}#portfolio` },
+        { '@type': 'ListItem', position: 3, name: entry.data.title, item: pageUrl },
+      ],
+    },
+  ],
+};
+---
+<Detail
+  title={entry.data.title}
+  pageTitle={`${entry.data.title} — Kenneth Allen`}
+  description={entry.data.summary}
+  image={entry.data.image}
+  imageAlt={entry.data.imageAlt}
+  video={entry.data.video}
+  backHref="/#portfolio"
+  backLabel="Portfolio"
+  meta={entry.data.tech.length > 0 ? entry.data.tech.join(' · ') : undefined}
+  links={links}
+>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)}></script>
+  <Content />
+</Detail>

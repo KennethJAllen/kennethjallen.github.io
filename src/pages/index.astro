@@ -1,9 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import aboutMe from '../assets/images/aboutme.jpg';
+import avatar from '../assets/images/avatar.png';
 import banner from '../assets/images/banner.png';
 
 const projects = (await getCollection('projects')).sort(
@@ -12,12 +13,59 @@ const projects = (await getCollection('projects')).sort(
 const papers = (await getCollection('papers')).sort(
   (a, b) => a.data.order - b.data.order,
 );
+
+const siteUrl = Astro.site!.toString();
+const avatarImg = await getImage({ src: avatar, width: 360, height: 360, fit: 'cover' });
+const description =
+  'Data scientist and mathematician. PhD in numerical analysis, with research on low-rank matrix completion, nuclear fusion simulation, and reinforcement learning.';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': `${siteUrl}#person`,
+      name: 'Kenneth Allen',
+      givenName: 'Kenneth',
+      familyName: 'Allen',
+      honorificPrefix: 'Dr.',
+      honorificSuffix: 'PhD',
+      url: siteUrl,
+      image: new URL(avatarImg.src, Astro.site).toString(),
+      jobTitle: 'Data Scientist',
+      description,
+      alumniOf: {
+        '@type': 'CollegeOrUniversity',
+        name: 'University of Georgia',
+      },
+      knowsAbout: [
+        'Numerical analysis',
+        'Low-rank matrix completion',
+        'Dynamic mode decomposition',
+        'Nuclear fusion simulation',
+        'Reinforcement learning',
+      ],
+      sameAs: [
+        'https://github.com/KennethJAllen',
+        'https://www.linkedin.com/in/kennethallenmath/',
+      ],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${siteUrl}#website`,
+      url: siteUrl,
+      name: 'Kenneth Allen',
+      publisher: { '@id': `${siteUrl}#person` },
+    },
+  ],
+};
 ---
-<Base>
+<Base title="Kenneth Allen — Data Scientist & Mathematician, PhD" description={description}>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)}></script>
   <section id="top" class="page-section hero" style={`background-image: url(${banner.src})`}>
     <div class="container">
       <div class="hero-text">
-        <h2>Hi, I'm<br />Dr. Kenneth Allen.</h2>
+        <h1>Hi, I'm<br />Dr. Kenneth Allen.</h1>
       </div>
     </div>
   </section>
@@ -28,7 +76,7 @@ const papers = (await getCollection('papers')).sort(
       <div class="project-grid">
         {projects.map((p, i) => (
           <ProjectCard
-            href={p.data.externalUrl ?? p.data.demoUrl}
+            href={`/projects/${p.id}/`}
             title={p.data.title}
             summary={p.data.summary}
             image={p.data.image}
@@ -47,7 +95,7 @@ const papers = (await getCollection('papers')).sort(
       <div class="project-grid">
         {papers.map((p) => (
           <ProjectCard
-            href={p.data.url}
+            href={`/papers/${p.id}/`}
             title={p.data.title}
             summary={p.data.venue ?? undefined}
             image={p.data.image}

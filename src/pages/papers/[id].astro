@@ -1,0 +1,66 @@
+---
+import { getCollection, render } from 'astro:content';
+import Detail from '../../layouts/Detail.astro';
+
+export async function getStaticPaths() {
+  const papers = await getCollection('papers');
+  return papers.map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const siteUrl = Astro.site!.toString();
+const pageUrl = new URL(`/papers/${entry.id}/`, Astro.site).toString();
+
+const readLabel =
+  entry.data.venue === 'arXiv'
+    ? 'Read on arXiv'
+    : entry.id === 'dissertation'
+      ? 'Read the dissertation'
+      : 'Read the paper';
+
+const meta = [entry.data.venue, entry.data.year].filter(Boolean).join(', ');
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'ScholarlyArticle',
+      headline: entry.data.title,
+      description: entry.data.summary,
+      url: pageUrl,
+      mainEntityOfPage: pageUrl,
+      sameAs: entry.data.url,
+      ...(entry.data.year ? { datePublished: String(entry.data.year) } : {}),
+      author: {
+        '@type': 'Person',
+        '@id': `${siteUrl}#person`,
+        name: 'Kenneth Allen',
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Papers', item: `${siteUrl}#papers` },
+        { '@type': 'ListItem', position: 3, name: entry.data.title, item: pageUrl },
+      ],
+    },
+  ],
+};
+---
+<Detail
+  title={entry.data.title}
+  pageTitle={`${entry.data.title} — Kenneth Allen`}
+  description={entry.data.summary}
+  image={entry.data.image}
+  imageAlt={entry.data.imageAlt}
+  backHref="/#papers"
+  backLabel="Papers"
+  meta={meta || undefined}
+  links={[{ href: entry.data.url, label: readLabel }]}
+>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)}></script>
+  <Content />
+</Detail>

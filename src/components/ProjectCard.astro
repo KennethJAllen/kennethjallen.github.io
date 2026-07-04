@@ -13,8 +13,9 @@ interface Props {
 
 const { href, title, summary, image, imageAlt, video, loading = 'lazy' } = Astro.props;
 const Wrapper = href ? 'a' : 'div';
+const rel = href?.startsWith('http') ? 'noopener' : undefined;
 const wrapperProps = href
-  ? { href, class: 'card-image', 'aria-label': title, rel: 'noopener' }
+  ? { href, class: 'card-image', 'aria-label': title, rel }
   : { class: 'card-image' };
 ---
 <article class="card">
@@ -43,7 +44,7 @@ const wrapperProps = href
     )}
   </Wrapper>
   <div class="card-body">
-    <h3>{href ? <a href={href} rel="noopener">{title}</a> : title}</h3>
+    <h3>{href ? <a href={href} rel={rel}>{title}</a> : title}</h3>
     {summary && <p>{summary}</p>}
   </div>
 </article>

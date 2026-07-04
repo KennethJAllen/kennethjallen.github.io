@@ -1,0 +1,88 @@
+---
+import { Image, getImage } from 'astro:assets';
+import Base from './Base.astro';
+
+interface Link {
+  href: string;
+  label: string;
+  secondary?: boolean;
+}
+
+interface Props {
+  title: string;
+  pageTitle: string;
+  description: string;
+  image: ImageMetadata;
+  imageAlt: string;
+  video?: string;
+  backHref: string;
+  backLabel: string;
+  meta?: string;
+  links?: Link[];
+}
+
+const {
+  title,
+  pageTitle,
+  description,
+  image,
+  imageAlt,
+  video,
+  backHref,
+  backLabel,
+  meta,
+  links = [],
+} = Astro.props;
+
+// Astro's image service never upscales, so a per-page 1200x630 OG crop is
+// only possible when the source is at least that large; otherwise use the
+// site-wide /og.png so link previews stay full-size.
+const canCrop = image.width >= 1200 && image.height >= 630;
+const ogImage = canCrop
+  ? await getImage({ src: image, width: 1200, height: 630, fit: 'cover', format: 'png' })
+  : null;
+---
+<Base
+  title={pageTitle}
+  description={description}
+  image={ogImage?.src ?? '/og.png'}
+  imageWidth={1200}
+  imageHeight={630}
+  imageAlt={ogImage ? imageAlt : undefined}
+  ogType="article"
+>
+  <slot name="head" slot="head" />
+  <section class="page-section detail">
+    <div class="container detail-container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href={backHref}>&larr; {backLabel}</a>
+      </nav>
+      <h1>{title}</h1>
+      {meta && <p class="detail-meta">{meta}</p>}
+      <div class="detail-hero">
+        {video ? (
+          <video autoplay muted loop playsinline preload="metadata" poster={image.src} aria-label={imageAlt}>
+            <source src={`${video}.webm`} type="video/webm" />
+            <source src={`${video}.mp4`} type="video/mp4" />
+          </video>
+        ) : (
+          <Image src={image} alt={imageAlt} widths={[720, 1080, 1440]} sizes="(min-width: 980px) 712px, 100vw" loading="eager" />
+        )}
+      </div>
+      {links.length > 0 && (
+        <div class="detail-links">
+          {links.map((l) => (
+            <a
+              class={l.secondary ? 'button secondary' : 'button'}
+              href={l.href}
+              rel={l.href.startsWith('http') ? 'noopener' : undefined}
+            >{l.label}</a>
+          ))}
+        </div>
+      )}
+      <div class="prose">
+        <slot />
+      </div>
+    </div>
+  </section>
+</Base>
