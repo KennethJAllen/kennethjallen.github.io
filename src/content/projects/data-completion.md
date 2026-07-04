@@ -8,4 +8,8 @@ tech: [Python, Linear Algebra, Optimization]
 order: 50
 ---
 
-Research code for reconstructing missing entries in matrices and tensors using low-rank completion techniques.
+Matrix and tensor completion is the problem of filling in the missing entries of a partially observed array — the mathematics behind recommender systems, image inpainting, and sensor data recovery. When the underlying data is (approximately) low-rank, a small fraction of observed entries can be enough to reconstruct the whole thing.
+
+This repository contains research code for low-rank matrix and tensor completion, connected to my [PhD dissertation](/papers/dissertation/) on geometric approaches to the completion problem. The image above shows a demonstration: a portrait reconstructed from a sparse set of observed pixels using low-rank completion.
+
+See the [repository](https://github.com/KennethJAllen/data-completion-research) for the algorithms and experiments.
