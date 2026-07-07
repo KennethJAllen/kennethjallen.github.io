@@ -1,0 +1,222 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base
+  title="Play Santorini vs AlphaZero — Kenneth Allen"
+  description="Play the board game Santorini against an AlphaZero-style neural network running entirely in your browser."
+>
+  <section class="page-section">
+    <div class="container detail-container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/#portfolio">← Portfolio</a>
+      </nav>
+      <div class="detail">
+        <h1>Play Santorini</h1>
+        <p class="sant-intro">
+          Each turn, move one of your builders to an adjacent square, then build a level on a
+          square adjacent to where it landed. Step onto a level-3 tower to win; a fourth level
+          caps the tower with a dome. You also lose if you can't move. The AI is an
+          AlphaZero-style network trained by self-play, running
+          <em>entirely in your browser</em> — read more on the
+          <a href="/projects/santorini-rl/">project page</a>.
+        </p>
+
+        <div id="santorini-app">
+          <div class="sant-controls">
+            <label>
+              Difficulty
+              <select class="sant-difficulty">
+                <option value="instant">Instant (raw policy)</option>
+                <option value="casual" selected>Casual (50 sims)</option>
+                <option value="strong">Strong (200 sims)</option>
+              </select>
+            </label>
+            <label>
+              You play
+              <select class="sant-seat">
+                <option value="first" selected>First</option>
+                <option value="second">Second</option>
+              </select>
+            </label>
+            <button type="button" class="sant-new-game">New game</button>
+            <button type="button" class="sant-undo">Undo</button>
+          </div>
+
+          <p class="sant-status" role="status">Loading model…</p>
+          <div class="sant-board-mount"></div>
+          <p class="sant-legend">
+            <span class="sant-worker sant-p0 sant-legend-tok"></span> <span class="sant-legend-p0">You</span>
+            &nbsp;·&nbsp;
+            <span class="sant-worker sant-p1 sant-legend-tok"></span> <span class="sant-legend-p1">AI</span>
+            &nbsp;·&nbsp; numbers are tower heights; press Esc to deselect
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { mount } from '../../santorini/main';
+  mount(document.getElementById('santorini-app')!);
+</script>
+
+<style>
+  .sant-intro {
+    color: var(--fg-soft);
+    max-width: 65ch;
+    margin: 0 0 1.75rem;
+  }
+
+  .sant-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .sant-controls label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    color: var(--muted);
+  }
+
+  .sant-controls select,
+  .sant-controls button {
+    font: inherit;
+    color: var(--fg);
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 0.4rem 0.7rem;
+  }
+
+  .sant-controls button {
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .sant-controls button:hover:not(:disabled) {
+    border-color: var(--fg);
+  }
+
+  .sant-controls button:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+
+  .sant-status {
+    min-height: 1.6em;
+    margin: 0 0 0.75rem;
+    color: var(--fg-soft);
+    font-weight: 500;
+  }
+
+  .sant-legend {
+    margin: 0.75rem 0 0;
+    color: var(--muted);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  /* Board — classes are applied from ui.ts, hence :global. */
+  :global(.sant-board) {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    max-width: 440px;
+    aspect-ratio: 1;
+    padding: 10px;
+    border-radius: 6px;
+    background: #7fb0c8; /* aegean */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 12px -4px rgba(0, 0, 0, 0.08);
+  }
+
+  :global(.sant-cell) {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 4px;
+    padding: 0;
+    font: inherit;
+    cursor: default;
+    background: #8fce7f00; /* overridden by height classes */
+  }
+
+  :global(.sant-h0) { background: #9ecf90; } /* grass */
+  :global(.sant-h1) { background: #f0ece2; }
+  :global(.sant-h2) { background: #f7f4ec; box-shadow: inset 0 0 0 3px #ddd6c4; }
+  :global(.sant-h3) { background: #fffdf7; box-shadow: inset 0 0 0 3px #ddd6c4, inset 0 0 0 6px #ece5d2; }
+  :global(.sant-dome) { background: #fffdf7; }
+
+  :global(.sant-level) {
+    position: absolute;
+    top: 3px;
+    right: 6px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #8a8064;
+    pointer-events: none;
+  }
+
+  :global(.sant-dome-cap) {
+    width: 55%;
+    height: 55%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #7f9fd4, #3b5c9e);
+    pointer-events: none;
+  }
+
+  :global(.sant-worker) {
+    width: 48%;
+    height: 48%;
+    border-radius: 50%;
+    pointer-events: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  }
+
+  :global(.sant-p0) { background: radial-gradient(circle at 35% 30%, #4a4a4a, #171717); }
+  :global(.sant-p1) { background: radial-gradient(circle at 35% 30%, #ff9ec4, #e0417f); }
+
+  :global(.sant-ghost) { opacity: 0.65; }
+
+  :global(.sant-selectable:not(:disabled)) { cursor: pointer; }
+
+  :global(.sant-selectable:not(:disabled):hover) {
+    outline: 2px solid rgba(0, 0, 0, 0.35);
+    outline-offset: -2px;
+  }
+
+  :global(.sant-selected) {
+    outline: 3px solid #1c1c1c;
+    outline-offset: -3px;
+  }
+
+  :global(.sant-move-target) {
+    outline: 3px dashed rgba(28, 28, 28, 0.55);
+    outline-offset: -3px;
+  }
+
+  :global(.sant-build-target) {
+    outline: 3px dashed #b8860b;
+    outline-offset: -3px;
+  }
+
+  .sant-legend-tok {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+  }
+
+  @media (max-width: 520px) {
+    :global(.sant-board) { gap: 4px; padding: 6px; }
+  }
+</style>
