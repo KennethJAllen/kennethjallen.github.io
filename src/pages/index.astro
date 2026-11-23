@@ -5,7 +5,18 @@ import Base from '../layouts/Base.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import aboutMe from '../assets/images/aboutme.jpg';
 import avatar from '../assets/images/avatar.png';
-import banner from '../assets/images/banner.png';
+import painting from '../assets/images/mondrian-painting.png';
+import red from '../assets/images/mondrian-red.png';
+import blue from '../assets/images/mondrian-blue.png';
+import white from '../assets/images/mondrian-white.png';
+import yellow from '../assets/images/mondrian-yellow.png';
+
+const terms = [
+  { image: red, alt: 'Large red block' },
+  { image: blue, alt: 'Blue block and white strip along the bottom' },
+  { image: white, alt: 'Two white blocks along the left edge' },
+  { image: yellow, alt: 'Small white and yellow blocks in the lower right' },
+];
 
 const projects = (await getCollection('projects')).sort(
   (a, b) => a.data.order - b.data.order,
@@ -62,11 +73,18 @@ const jsonLd = {
 ---
 <Base title="Kenneth Allen — Data Scientist & Mathematician, PhD" description={description}>
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)}></script>
-  <section id="top" class="page-section hero" style={`background-image: url(${banner.src})`}>
+  <section id="top" class="page-section hero">
     <div class="container">
-      <div class="hero-text">
-        <h1>Hi, I'm<br />Dr. Kenneth Allen.</h1>
-      </div>
+      <h1>Hi, I'm Dr. Kenneth Allen.</h1>
+      <figure class="mondrian" aria-label="Mondrian painting and its four low-rank terms">
+        <Image class="mondrian-original" src={painting} alt="Mondrian composition with red, blue, yellow, and white rectangles divided by black lines" loading="eager" />
+        {terms.map(({ image, alt }, i) => (
+          <>
+            <span class="mondrian-operator" aria-hidden="true">{i === 0 ? '=' : '+'}</span>
+            <Image src={image} alt={alt} loading="eager" />
+          </>
+        ))}
+      </figure>
     </div>
   </section>
 
