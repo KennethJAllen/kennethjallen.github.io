@@ -6,7 +6,7 @@ imageAlt: Santorini board game
 externalUrl: https://github.com/KennethJAllen/santorini
 demoUrl: /santorini/
 tech: [Python, PyTorch, AlphaZero, MCTS, TypeScript, ONNX Runtime Web]
-order: 30
+order: 55
 ---
 
 Santorini is a two-player abstract strategy game played on a 5×5 grid: each turn you move a builder and construct a level of a tower, and the first player to step onto a third-level tower wins. The rules are simple, but the game tree is deep — which makes it a great testbed for reinforcement learning.
